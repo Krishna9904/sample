@@ -1,0 +1,48 @@
+table{
+    background:#404040;
+    width:100%;
+    border-collapse:collapse;  
+}
+  
+
+  th{
+    color:white;
+    font-size:50px;
+    text-align: center;
+    }
+
+  #tr1{
+    border-bottom:2px solid grey;
+    padding: 10px;
+  }
+  #tr2{
+    border-bottom:2px solid grey;
+    padding: 10px;
+  }    
+  img{
+  width:100px;
+  height:100px;
+  }
+  div{
+    font-size: 25px;
+    color:white;
+  }
+  ul{
+    color:white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+  #div11,#div21,#div31{
+    text-align: left;
+    color:white;
+    font-size: 50px;
+  }
+  #div12,#div22{
+    text-align: left;
+    color:white;
+    font-size: 15px;
+  }
+
+  #td12,#td22,#td32{
+padding-right: 50px;
+  }
+ 
