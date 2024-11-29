@@ -1,0 +1,98 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from gensim.models import Word2Vec
+
+app = Flask(__name__)
+CORS(app)
+
+# Train a simple Word2Vec model
+sentences = [["this", "is", "a", "sample"], ["another", "example", "sentence"]]
+model = Word2Vec(sentences, vector_size=100, min_count=1, workers=4)
+
+@app.route('/get_embeddings', methods=['POST'])
+def get_embeddings():
+    data = request.json
+    sentence = data.get('sentence', '')
+    words = sentence.split()
+    embeddings = [model.wv[word].tolist() for word in words if word in model.wv]
+
+    return jsonify({
+        "sentence": sentence,
+        "embeddings": embeddings
+    })
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+import React, { useState } from "react";
+import axios from "axios";
+
+const App = () => {
+  const [sentence, setSentence] = useState("");
+  const [embeddings, setEmbeddings] = useState(null);
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/get_embeddings",
+        { sentence }
+      );
+      setEmbeddings(response.data.embeddings);
+    } catch (error) {
+      console.error("Error fetching embeddings:", error);
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h1>Sentence to Vector Embeddings</h1>
+      <input
+        type="text"
+        value={sentence}
+        onChange={(e) => setSentence(e.target.value)}
+        placeholder="Enter a sentence"
+        style={{
+          width: "300px",
+          padding: "10px",
+          marginRight: "10px",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+        }}
+      />
+      <button
+        onClick={handleSubmit}
+        style={{
+          padding: "10px 15px",
+          backgroundColor: "#007BFF",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
+        Get Embeddings
+      </button>
+      <div style={{ marginTop: "20px" }}>
+        <h2>Embeddings:</h2>
+        {embeddings ? (
+          <pre
+            style={{
+              background: "#f8f9fa",
+              padding: "15px",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              overflowX: "auto",
+            }}
+          >
+            {JSON.stringify(embeddings, null, 2)}
+          </pre>
+        ) : (
+          <p>No embeddings fetched yet.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
