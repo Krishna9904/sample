@@ -1,37 +1,53 @@
 import React, { useState } from "react";
 import Assistant from "./Assistant";
+import data from "./data";
 
-function App() {
+const App = () => {
   const [query, setQuery] = useState("");
+  const [matchedTopic, setMatchedTopic] = useState(null);
+
+  const handleSearch = (event) => {
+    const inputText = event.target.value.toLowerCase();
+    setQuery(inputText);
+
+    let foundTopic = null;
+
+    // Iterate through topics to find keywords in input
+    Object.keys(data).forEach((topic) => {
+      if (
+        inputText.includes(topic.toLowerCase()) ||
+        data[topic].keyConcept
+          .toLowerCase()
+          .split(" ")
+          .some((word) => inputText.includes(word))
+      ) {
+        foundTopic = topic;
+      }
+    });
+
+    setMatchedTopic(foundTopic);
+  };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      {/* Left Panel - Search Input */}
-      <div
-        style={{
-          width: "50%",
-          padding: "20px",
-          backgroundColor: "#e3e3e3",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <h2>Welcome to the Learning Hub!</h2>
+    <div style={{ display: "flex" }}>
+      {/* Left Side: Search Input */}
+      <div style={{ width: "30%", padding: "20px", background: "#f4f4f4" }}>
+        <h2>Search Topics</h2>
         <input
           type="text"
-          placeholder="Enter keyword..."
+          placeholder="Enter a topic..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ padding: "10px", width: "80%", marginTop: "10px" }}
+          onChange={handleSearch}
+          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
       </div>
 
-      {/* Right Panel - Assistant with Search Query */}
-      <Assistant query={query} />
+      {/* Right Side: Assistant */}
+      <div style={{ width: "70%", padding: "20px" }}>
+        <Assistant matchedTopic={matchedTopic} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;

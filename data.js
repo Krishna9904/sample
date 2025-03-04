@@ -1,44 +1,76 @@
 const data = {
-  "Machine Learning": {
-    title: "Introduction to Machine Learning",
-    description:
-      "Machine learning is a method of data analysis that automates analytical model building.",
-    type: "text",
-    content:
-      "It is a branch of AI that allows systems to learn from data, identify patterns, and make decisions.",
-  },
-  Cybersecurity: {
-    title: "Cybersecurity Measures",
-    description:
-      "Best practices to protect systems, networks, and programs from cyber attacks.",
-    type: "image",
-    image: "https://via.placeholder.com/300",
-  },
-  SpaceX: {
-    title: "Latest SpaceX Mission",
-    description: "Watch the latest SpaceX launch video.",
-    type: "video",
-    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-  },
-  "Stock Market": {
-    title: "Stock Market Trends",
-    description: "A table showing recent stock market performance.",
-    type: "table",
-    tableData: [
-      { company: "Apple", price: "$150", change: "+2.5%" },
-      { company: "Tesla", price: "$700", change: "-1.2%" },
-      { company: "Amazon", price: "$3300", change: "+0.8%" },
+  topic1: {
+    keyConcept: "Introduction to Web Development",
+    bulletPoints: [
+      "Web development involves building and maintaining websites.",
+      "It consists of frontend, backend, and full-stack development.",
+      "Technologies include HTML, CSS, JavaScript, and frameworks like React.",
     ],
-  },
-  "AI vs. Humans": {
-    title: "Comparison between AI and Humans",
-    description: "A structured tabulated comparison.",
-    type: "tabulated",
-    tabulatedData: [
-      { criteria: "Speed", AI: "Fast", Human: "Slow" },
-      { criteria: "Creativity", AI: "Limited", Human: "High" },
-      { criteria: "Consistency", AI: "High", Human: "Varies" },
+    paragraph:
+      "Web development is the work involved in developing a website for the Internet. It ranges from simple static pages to complex web applications.",
+    links: [
+      "https://developer.mozilla.org/en-US/docs/Learn",
+      "https://www.w3schools.com/",
+      "https://react.dev/",
+      "https://css-tricks.com/",
+      "https://frontendmasters.com/",
+      "https://javascript.info/",
     ],
+    table: {
+      headers: ["Technology", "Purpose"],
+      rows: [
+        ["HTML", "Structure of Web Page"],
+        ["CSS", "Styling"],
+        ["JavaScript", "Dynamic Content"],
+        ["React", "Component-Based UI"],
+      ],
+    },
+  },
+  topic2: {
+    keyConcept: "Machine Learning Basics",
+    bulletPoints: [
+      "Machine Learning enables computers to learn from data.",
+      "Supervised, Unsupervised, and Reinforcement Learning are key types.",
+      "Popular ML libraries include TensorFlow and Scikit-Learn.",
+    ],
+    paragraph:
+      "Machine Learning (ML) is a field of AI that enables systems to learn and improve from experience without being explicitly programmed.",
+    links: [
+      "https://www.coursera.org/learn/machine-learning",
+      "https://scikit-learn.org/",
+      "https://www.tensorflow.org/",
+    ],
+    table: {
+      headers: ["ML Type", "Description"],
+      rows: [
+        ["Supervised", "Labeled data used for training"],
+        ["Unsupervised", "No labels, finds patterns"],
+        ["Reinforcement", "Rewards-based learning"],
+      ],
+    },
+  },
+  topic3: {
+    keyConcept: "Cloud Computing Overview",
+    bulletPoints: [
+      "Cloud computing delivers computing services over the internet.",
+      "Key providers include AWS, Azure, and Google Cloud.",
+      "Models include IaaS, PaaS, and SaaS.",
+    ],
+    paragraph:
+      "Cloud computing allows on-demand access to computing resources with minimal management effort.",
+    links: [
+      "https://aws.amazon.com/",
+      "https://azure.microsoft.com/",
+      "https://cloud.google.com/",
+    ],
+    table: {
+      headers: ["Cloud Model", "Example"],
+      rows: [
+        ["IaaS", "AWS EC2"],
+        ["PaaS", "Google App Engine"],
+        ["SaaS", "Google Docs"],
+      ],
+    },
   },
 };
 
