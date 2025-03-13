@@ -1,0 +1,298 @@
+import React from "react";
+import data from "./data";
+import "./App.css";
+
+const Assistant = ({ matchedTopic }) => {
+  if (!matchedTopic || !data[matchedTopic]) return <p>No topic selected.</p>;
+
+  const { keyConcept, sections } = data[matchedTopic]; // Fetch sections dynamically
+
+  return (
+    <div className="assistant-container">
+      <h2 className="assistant-title">{keyConcept}</h2>
+
+      {sections.map((section, index) => (
+        <div key={index} className="assistant-section">
+          <h3 className="section-title">{section.heading}</h3>
+
+          {section.bulletPoints && (
+            <ul>
+              {section.bulletPoints.map((point, i) => (
+                <li key={i}>{point}</li>
+              ))}
+            </ul>
+          )}
+
+          {section.paragraph && <p>{section.paragraph}</p>}
+
+          {section.table && (
+            <table className="assistant-table">
+              <thead>
+                <tr>
+                  {section.table.headers.map((header, i) => (
+                    <th key={i}>{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {section.table.rows.map((row, i) => (
+                  <tr key={i}>
+                    {row.map((cell, j) => (
+                      <td key={j}>{cell}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {section.links && (
+            <div className="links-container">
+              {section.links.map((link, i) => (
+                <p key={i}>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.text}
+                  </a>
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Assistant;
+
+
+import React, { useState } from "react";
+import Assistant from "./Assistant";
+import data from "./data";
+import "./App.css";
+
+const App = () => {
+  const [query, setQuery] = useState("");
+  const [matchedTopic, setMatchedTopic] = useState(null);
+  const [showResults, setShowResults] = useState(false); // Controls when to show assistant
+
+  const handleSearch = () => {
+    let foundTopic = "topic1"; // Default topic if no match
+
+    Object.keys(data).forEach((topic) => {
+      if (
+        query.toLowerCase().includes(topic.toLowerCase()) ||
+        data[topic].keyConcept
+          .toLowerCase()
+          .split(" ")
+          .some((word) => query.toLowerCase().includes(word))
+      ) {
+        foundTopic = topic;
+      }
+    });
+
+    setMatchedTopic(foundTopic);
+    setShowResults(true); // Display results after clicking search
+  };
+
+  return (
+    <div style={{ display: "flex", height: "100vh" }}>
+      {/* Left Side: Search Input */}
+      <div style={{ width: "50%", padding: "20px", background: "#f4f4f4" }}>
+        <h2>Search Topics</h2>
+        <input
+          type="text"
+          placeholder="Enter a topic..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+        />
+        <button
+          onClick={handleSearch}
+          style={{ padding: "10px", width: "100%" }}
+        >
+          Search
+        </button>
+      </div>
+
+      {/* Right Side: Assistant (Appears After Clicking Search) */}
+      <div
+        style={{
+          width: "50%",
+          padding: "20px",
+          display: showResults ? "block" : "none",
+        }}
+      >
+        <Assistant matchedTopic={matchedTopic} />
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.left-panel {
+  width: 50%;
+  padding: 20px;
+  background: #f4f4f4;
+  border-right: 2px solid #ccc;
+}
+
+.search-box {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.right-panel {
+  width: 50%;
+  padding: 20px;
+  background: white;
+}
+
+.assistant-container {
+  border: 2px solid #aaa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Section styling (No Collapse) */
+.section {
+  margin-bottom: 15px;
+  border: 2px solid #4caf50; /* Green border */
+  padding: 10px;
+  border-radius: 5px;
+  background: #f9f9f9;
+}
+
+/* Bullet Points */
+ul {
+  list-style-type: square;
+  padding-left: 20px;
+}
+
+/* Links Section */
+ul a {
+  text-decoration: none;
+  color: #2196f3;
+  font-weight: bold;
+}
+
+ul a:hover {
+  text-decoration: underline;
+  color: #0b7dda;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border: 2px solid #ff9800; /* Orange border */
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #ffeb3b; /* Yellow for table headers */
+  color: #333;
+}
+
+/* Hover Effects */
+.section:hover {
+  border-color: #388e3c; /* Dark green when hovering */
+}
+
+table:hover {
+  border-color: #f57c00; /* Darker orange for hover effect */
+}
+
+
+const data = {
+  topic1: {
+    keyConcept: "Introduction to Web Development",
+    sections: [
+      {
+        heading: "What is Web Development?",
+        bulletPoints: [
+          "Web development involves building and maintaining websites.",
+          "It consists of frontend, backend, and full-stack development.",
+          "Technologies include HTML, CSS, JavaScript, and frameworks like React.",
+        ],
+        paragraph:
+          "Web development is the work involved in developing a website for the Internet. It ranges from simple static pages to complex web applications.",
+      },
+      {
+        heading: "Useful Learning Resources",
+        links: [
+          {
+            text: "MDN Web Docs",
+            url: "https://developer.mozilla.org/en-US/docs/Learn",
+          },
+          { text: "W3Schools", url: "https://www.w3schools.com/" },
+          { text: "React Documentation", url: "https://react.dev/" },
+        ],
+      },
+      {
+        heading: "Web Technologies Table",
+        table: {
+          headers: ["Technology", "Purpose"],
+          rows: [
+            ["HTML", "Structure of Web Page"],
+            ["CSS", "Styling"],
+            ["JavaScript", "Dynamic Content"],
+            ["React", "Component-Based UI"],
+          ],
+        },
+      },
+    ],
+  },
+  topic2: {
+    keyConcept: "Machine Learning Basics",
+    sections: [
+      {
+        heading: "Introduction to Machine Learning",
+        bulletPoints: [
+          "Machine Learning enables computers to learn from data.",
+          "Supervised, Unsupervised, and Reinforcement Learning are key types.",
+          "Popular ML libraries include TensorFlow and Scikit-Learn.",
+        ],
+      },
+      {
+        heading: "Machine Learning Resources",
+        links: [
+          {
+            text: "Coursera ML Course",
+            url: "https://www.coursera.org/learn/machine-learning",
+          },
+          { text: "Scikit-Learn", url: "https://scikit-learn.org/" },
+        ],
+      },
+      {
+        heading: "Types of ML Models",
+        table: {
+          headers: ["ML Type", "Description"],
+          rows: [
+            ["Supervised", "Labeled data used for training"],
+            ["Unsupervised", "No labels, finds patterns"],
+            ["Reinforcement", "Rewards-based learning"],
+          ],
+        },
+      },
+    ],
+  },
+};
+
+export default data;
