@@ -1,51 +1,63 @@
 import React, { useState } from "react";
 import Assistant from "./Assistant";
 import data from "./data";
+import "./App.css";
 
 const App = () => {
   const [query, setQuery] = useState("");
-  const [matchedTopic, setMatchedTopic] = useState(null);
+  const [matchedTopic, setMatchedTopic] = useState("topic1"); // Default to topic1
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
 
-  const handleSearch = (event) => {
-    const inputText = event.target.value.toLowerCase();
-    setQuery(inputText);
+  const handleSearch = () => {
+    if (!query.trim()) return;
 
-    let foundTopic = null;
-
-    // Iterate through topics to find keywords in input
+    let foundTopic = "topic1"; // Default topic
     Object.keys(data).forEach((topic) => {
       if (
-        inputText.includes(topic.toLowerCase()) ||
+        query.toLowerCase().includes(topic.toLowerCase()) ||
         data[topic].keyConcept
           .toLowerCase()
           .split(" ")
-          .some((word) => inputText.includes(word))
+          .some((word) => query.toLowerCase().includes(word))
       ) {
         foundTopic = topic;
       }
     });
 
     setMatchedTopic(foundTopic);
+    setIsRightPanelOpen(true); // Show right panel on search
+  };
+
+  const handleClose = () => {
+    setIsRightPanelOpen(false); // Hide right panel
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      {/* Left Side: Search Input */}
-      <div style={{ width: "30%", padding: "20px", background: "#f4f4f4" }}>
+    <div className="app-container">
+      {/* Left Panel */}
+      <div className={`left-panel ${isRightPanelOpen ? "" : "full-width"}`}>
         <h2>Search Topics</h2>
         <input
           type="text"
           placeholder="Enter a topic..."
           value={query}
-          onChange={handleSearch}
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+          onChange={(e) => setQuery(e.target.value)}
+          className="search-input"
         />
+        <button onClick={handleSearch} className="search-button">
+          Search
+        </button>
       </div>
 
-      {/* Right Side: Assistant */}
-      <div style={{ width: "70%", padding: "20px" }}>
-        <Assistant matchedTopic={matchedTopic} />
-      </div>
+      {/* Right Panel */}
+      {isRightPanelOpen && (
+        <div className="right-panel">
+          <button onClick={handleClose} className="close-button">
+            ✖
+          </button>
+          <Assistant matchedTopic={matchedTopic} />
+        </div>
+      )}
     </div>
   );
 };

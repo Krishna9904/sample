@@ -1,57 +1,26 @@
 import React from "react";
 import data from "./data";
+import Template1 from "./Templste1";
+import Template2 from "./Template2";
+import "./Assistant.css";
 
 const Assistant = ({ matchedTopic }) => {
-  if (!matchedTopic) {
-    return <h2>Right side panel</h2>;
-  }
-
   const topicData = data[matchedTopic];
 
+  if (!topicData) {
+    return <div className="assistant-container">No data available.</div>;
+  }
+
   return (
-    <div>
-      <h2>{topicData.keyConcept}</h2>
-      <ul>
-        {topicData.bulletPoints.map((point, index) => (
-          <li key={index}>{point}</li>
-        ))}
-      </ul>
-      <p>{topicData.paragraph}</p>
+    <div className="assistant-container">
+      <h2 className="topic-name">{matchedTopic.toUpperCase()}</h2>
 
-      <h3>Useful Links:</h3>
-      <ul>
-        {topicData.links.map((link, index) => (
-          <li key={index}>
-            <a href={link} target="_blank" rel="noopener noreferrer">
-              {link}
-            </a>
-          </li>
-        ))}
-      </ul>
-
-      <h3>Table Information:</h3>
-      <table border="1" style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead>
-          <tr>
-            {topicData.table.headers.map((header, index) => (
-              <th key={index} style={{ padding: "10px", background: "#ddd" }}>
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {topicData.table.rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((cell, cellIndex) => (
-                <td key={cellIndex} style={{ padding: "10px" }}>
-                  {cell}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Use Template1 for Topic1 and Template2 for Topic2 */}
+      {matchedTopic === "topic1" ? (
+        <Template1 topicData={topicData} />
+      ) : (
+        <Template2 topicData={topicData} />
+      )}
     </div>
   );
 };
