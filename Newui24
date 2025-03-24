@@ -1,0 +1,131 @@
+import streamlit as st
+import time
+
+st.set_page_config(layout="wide")  # Utilize full page width
+
+# HTTPS Configuration (Replace with your actual key and certificate files)
+SSL_KEY_FILE = "/path/to/your.key"  # Replace with actual path
+SSL_CERT_FILE = "/path/to/your.pem"  # Replace with actual path
+
+# Custom CSS for Navbar, Buttons, and Modal Pop-up
+st.markdown(
+    """
+    <style>
+        .navbar {
+            background-color: white;
+            padding: 15px;
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: left;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .button {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+    <div class="navbar">🖥️ Job Monitoring and Resource Allocation Dashboard</div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Layout for Running Sessions and Projects
+col1, col2 = st.columns([1, 1])
+
+# Running Sessions Section
+with col1:
+    st.subheader("🖥️ Running Sessions")
+    if st.button("🚀 Launch New Session", key="launch_session", help="Start a new session"):
+        st.session_state["show_modal"] = True
+
+    # Display Dummy Running Sessions Below the Button
+    dummy_jobs = [
+        {"name": "Session 1", "status": "Running"},
+        {"name": "Session 2", "status": "Queued"},
+        {"name": "Session 3", "status": "Completed"}
+    ]
+
+    for job in dummy_jobs:
+        with st.container():
+            st.markdown(f"**{job['name']}**")
+            st.text(f"Status: {job['status']}")
+
+# Projects Section
+with col2:
+    st.subheader("📂 Projects")
+    if st.button("➕ Launch New Project", key="launch_project", help="Start a new project"):
+        st.session_state["show_modal_project"] = True
+
+    dummy_projects = [
+        {"name": "Project A", "description": "Data analysis project"},
+        {"name": "Project B", "description": "Machine learning pipeline"},
+        {"name": "Project C", "description": "Web app development"}
+    ]
+
+    for project in dummy_projects:
+        with st.container():
+            st.markdown(f"**{project['name']}**")
+            st.text(f"{project['description']}")
+
+# Modal Pop-up for Launch Session
+if "show_modal" in st.session_state and st.session_state["show_modal"]:
+    with st.container():
+        st.markdown('<div class="modal">', unsafe_allow_html=True)
+        st.write("### 🚀 New Session Parameters")
+        num_gpus = st.number_input("🎛️ Number of GPUs", min_value=1, max_value=8, step=1)
+        memory = st.number_input("💾 Memory (GB)", min_value=1, max_value=128, step=1)
+        duration = st.number_input("⏳ Session Duration (hours)", min_value=1, max_value=24, step=1)
+        if st.button("✅ Submit Request"):
+            st.success("🎉 Session requested successfully!")
+            st.session_state["show_modal"] = False
+        if st.button("❌ Close"):
+            st.session_state["show_modal"] = False
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# Modal Pop-up for Launch Project
+if "show_modal_project" in st.session_state and st.session_state["show_modal_project"]:
+    with st.container():
+        st.markdown('<div class="modal">', unsafe_allow_html=True)
+        st.write("### ➕ New Project Parameters")
+        project_name = st.text_input("📌 Project Name")
+        project_desc = st.text_area("📝 Description")
+        if st.button("✅ Create Project"):
+            st.success(f"🎉 Project '{project_name}' created successfully!")
+            st.session_state["show_modal_project"] = False
+        if st.button("❌ Close"):
+            st.session_state["show_modal_project"] = False
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# HTTPS Activation
+st.markdown(f"""
+    <script>
+        if (window.location.protocol !== "https:") {{
+            window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+        }}
+    </script>
+    """, unsafe_allow_html=True)
+
+# Auto-refresh every 10 seconds
+st.experimental_rerun() if time.sleep(10) else None
