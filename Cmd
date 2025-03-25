@@ -1,0 +1,1 @@
+streamlit run app.py --server.enableCORS=false --server.enableXsrfProtection=false --server.sslCert="/path/to/your-cert.pem" --server.sslKey="/path/to/your-key.key"
