@@ -1,0 +1,74 @@
+import streamlit as st
+
+# --- Custom CSS and Navbar HTML ---
+st.markdown(
+    """
+    <style>
+        header {visibility: hidden;}
+        .stDeployButton {visibility: hidden;}
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-left img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .navbar-left h1 {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+        .stApp { margin-top: 80px; }
+    </style>
+
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo">
+            <h1>My Workbench</h1>
+        </div>
+        <div class="navbar-right">
+            <div id="session-type-placeholder"></div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# --- Inject dropdown into right side of top bar ---
+with st.container():
+    st.markdown('<div style="position: absolute; right: 30px; top: 20px; width: 200px;">', unsafe_allow_html=True)
+    st.selectbox("Session Type", ["Basic", "GPU Intensive", "Long Running"], key="session_type", label_visibility="collapsed")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# --- Main Content Below Navbar ---
+st.subheader("Sessions")
+st.button("Launch New Session")
+
+st.write("Session 1 - Status: Running")
+st.write("Session 2 - Status: Queued")
+st.write("Session 3 - Status: Completed")
+
+st.subheader("Jobs")
+st.button("Launch New Job")
+
+st.write("Job A - Data analysis project")
+st.write("Job B - Machine learning pipeline")
+st.write("Job C - Web app development")
