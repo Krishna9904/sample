@@ -1,0 +1,56 @@
+# CSS and HTML for navbar with dropdown
+st.markdown(
+    """
+    <style>
+        header {visibility: hidden;}
+        .stDeployButton {visibility: hidden;}
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-left img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .navbar-left h1 {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .dropdown-overlay {
+            position: absolute;
+            right: 30px;
+            top: 25px;
+            width: 200px;
+        }
+        .stApp { margin-top: 80px; }
+    </style>
+
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo">
+            <h1>My Workbench</h1>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Inject dropdown into top bar (floating)
+with st.container():
+    st.markdown('<div class="dropdown-overlay">', unsafe_allow_html=True)
+    st.selectbox("Session Type", ["Basic", "GPU Intensive", "Long Running"], key="session_type", label_visibility="collapsed")
+    st.markdown("</div>", unsafe_allow_html=True)
