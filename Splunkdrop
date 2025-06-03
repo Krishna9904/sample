@@ -1,0 +1,87 @@
+<dashboard>
+  <label>Cascading Dropdowns Dashboard</label>
+  <description>This dashboard demonstrates cascading dropdowns using inputlookup.</description>
+  <fieldset submitButton="false">
+    <!-- Environment Dropdown -->
+    <input type="dropdown" token="env" searchWhenChanged="true">
+      <label>Select Environment</label>
+      <search>
+        <query>
+          | inputlookup your_lookup.csv
+          | dedup env
+          | sort env
+          | table env
+        </query>
+      </search>
+      <fieldForLabel>env</fieldForLabel>
+      <fieldForValue>env</fieldForValue>
+      <default>*</default>
+    </input>
+
+    <!-- Platform Dropdown -->
+    <input type="dropdown" token="platform" searchWhenChanged="true">
+      <label>Select Platform</label>
+      <search>
+        <query>
+          | inputlookup your_lookup.csv
+          | search env="$env$"
+          | dedup platform
+          | sort platform
+          | table platform
+        </query>
+      </search>
+      <fieldForLabel>platform</fieldForLabel>
+      <fieldForValue>platform</fieldForValue>
+      <default>*</default>
+    </input>
+
+    <!-- Role Dropdown -->
+    <input type="dropdown" token="role" searchWhenChanged="true">
+      <label>Select Role</label>
+      <search>
+        <query>
+          | inputlookup your_lookup.csv
+          | search env="$env$" platform="$platform$"
+          | dedup role
+          | sort role
+          | table role
+        </query>
+      </search>
+      <fieldForLabel>role</fieldForLabel>
+      <fieldForValue>role</fieldForValue>
+      <default>*</default>
+    </input>
+
+    <!-- Hostname Dropdown -->
+    <input type="dropdown" token="hostname" searchWhenChanged="true">
+      <label>Select Hostname</label>
+      <search>
+        <query>
+          | inputlookup your_lookup.csv
+          | search env="$env$" platform="$platform$" role="$role$"
+          | dedup hostname
+          | sort hostname
+          | table hostname
+        </query>
+      </search>
+      <fieldForLabel>hostname</fieldForLabel>
+      <fieldForValue>hostname</fieldForValue>
+      <default>*</default>
+    </input>
+  </fieldset>
+
+  <!-- Optional Panel to Display Selected Values -->
+  <row>
+    <panel>
+      <title>Selected Filters</title>
+      <html>
+        <![CDATA[
+          <p><strong>Environment:</strong> $env$</p>
+          <p><strong>Platform:</strong> $platform$</p>
+          <p><strong>Role:</strong> $role$</p>
+          <p><strong>Hostname:</strong> $hostname$</p>
+        ]]>
+      </html>
+    </panel>
+  </row>
+</dashboard>
