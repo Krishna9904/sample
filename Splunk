@@ -1,0 +1,55 @@
+<form>
+  <label>Server Selection Dashboard</label>
+  <fieldset submitButton="false">
+    <!-- Environment Dropdown -->
+    <input type="dropdown" token="tokEnvironment" searchWhenChanged="true">
+      <label>Select Environment</label>
+      <search>
+        <query>| inputlookup servers.csv | stats count by Environment</query>
+      </search>
+      <fieldForLabel>Environment</fieldForLabel>
+      <fieldForValue>Environment</fieldForValue>
+      <default>Prod</default>
+      <change>
+        <unset token="tokPlatform"></unset>
+        <unset token="tokServer"></unset>
+      </change>
+    </input>
+
+    <!-- Platform Dropdown -->
+    <input type="dropdown" token="tokPlatform" searchWhenChanged="true">
+      <label>Select Platform</label>
+      <search>
+        <query>| inputlookup servers.csv | search Environment="$tokEnvironment$" | stats count by Platform</query>
+      </search>
+      <fieldForLabel>Platform</fieldForLabel>
+      <fieldForValue>Platform</fieldForValue>
+      <default>Windows</default>
+      <change>
+        <unset token="tokServer"></unset>
+      </change>
+    </input>
+
+    <!-- Server Dropdown -->
+    <input type="dropdown" token="tokServer" searchWhenChanged="true">
+      <label>Select Server</label>
+      <search>
+        <query>| inputlookup servers.csv | search Environment="$tokEnvironment$" Platform="$tokPlatform$" | stats count by Server</query>
+      </search>
+      <fieldForLabel>Server</fieldForLabel>
+      <fieldForValue>Server</fieldForValue>
+    </input>
+  </fieldset>
+
+  <!-- Display Selected Values -->
+  <row>
+    <panel>
+      <title>Selected Server Details</title>
+      <table>
+        <search>
+          <query>| inputlookup servers.csv | search Environment="$tokEnvironment$" Platform="$tokPlatform$" Server="$tokServer$"</query>
+        </search>
+      </table>
+    </panel>
+  </row>
+</form>
